@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Work · BiLA-KDE</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="/app.mjs"></script>
+</head>
+<body>
+  <aside class="sidebar" aria-label="Workspace navigation">
+    <a href="/" class="brand"><span class="brand-mark" aria-hidden="true">B</span><span>BiLA-KDE<small>Research workspace</small></span></a>
+    <button class="overview selected" id="overview"><span aria-hidden="true">▦</span> Overview <span id="nav-total" class="nav-count">—</span></button>
+    <div class="nav-caption">EPICS <span id="epic-total">—</span></div>
+    <nav id="epic-nav" aria-label="Epics"></nav>
+    <div class="sidebar-note"><span class="local-dot" aria-hidden="true"></span><div>Local workspace<small>Markdown is the source of truth</small></div></div>
+  </aside>
+  <main>
+    <header class="page-header">
+      <div><div class="breadcrumb">Workspace <span>/</span> Overview</div><h1>Work</h1></div>
+      <div class="header-actions"><span id="freshness" class="freshness" role="status">Connecting…</span><button id="refresh" class="icon-button" aria-label="Refresh issues" title="Refresh issues">↻</button></div>
+    </header>
+    <div id="notice" class="notice" role="alert" hidden></div>
+    <section class="overview-section" aria-labelledby="epics-heading">
+      <div class="section-heading"><h2 id="epics-heading">Epics</h2><span id="workspace-summary" class="muted">Loading local tracker…</span></div>
+      <div id="epic-cards" class="epic-grid"><div class="loading-card">Reading your workspace…</div></div>
+    </section>
+    <section id="campaign" class="campaign" aria-label="Research campaign progress" hidden></section>
+    <section class="issues-section" aria-labelledby="issues-heading">
+      <div class="section-heading issue-heading"><div class="heading-with-count"><h2 id="issues-heading">Issue board</h2><span id="view-count" class="count-badge">—</span></div><span id="view-summary" class="muted"></span></div>
+      <div class="toolbar">
+        <label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Search issues…" aria-label="Search issues"><kbd>/</kbd></label>
+        <label class="sr-only" for="epic-filter">Filter by epic</label><select id="epic-filter"><option value="">All epics</option></select>
+        <label class="sr-only" for="status-filter">Filter by status</label><select id="status-filter"><option value="">All statuses</option><option value="ready">Ready</option><option value="in_progress">In progress</option><option value="blocked">Blocked</option><option value="resolved">Resolved</option><option value="attention">Needs attention</option></select>
+        <button id="clear" class="text-button" hidden>Reset</button>
+        <div class="view-switch" role="group" aria-label="Issue view"><button id="board-view" aria-pressed="true" title="Board view" aria-label="Board view">▦ <span>Board</span></button><button id="list-view" aria-pressed="false" title="List view" aria-label="List view">☰ <span>List</span></button><button id="dependency-view" aria-pressed="false" title="Dependency view" aria-label="Dependency view">⑂ <span>Dependency</span></button></div>
+      </div>
+      <div id="board" class="board" aria-label="Issues by status"></div>
+      <div id="list" class="list-view" hidden></div>
+      <div id="dependency" class="dependency-view" hidden>
+        <div class="graph-toolbar"><div><strong>Task dependencies</strong><p id="graph-caption">Prerequisite → dependent</p></div><div class="graph-controls" role="group" aria-label="Graph zoom"><button id="graph-zoom-out" aria-label="Zoom out">−</button><output id="graph-scale" aria-live="polite">100%</output><button id="graph-zoom-in" aria-label="Zoom in">+</button><button id="graph-fit">Fit</button><button id="graph-reset" aria-label="Reset graph zoom">100%</button></div></div>
+        <div id="graph-viewport" class="graph-viewport" tabindex="0" role="region" aria-label="Task dependency graph"><div id="graph-size"><div id="graph-canvas" class="graph-canvas"></div></div></div>
+        <div class="graph-legend"><span>Arrows point from prerequisite to dependent.</span><span>Muted cards provide prerequisite context. Scroll to explore; select a task for details.</span></div>
+      </div>
+      <div id="empty" class="empty-state" hidden><span aria-hidden="true">⌕</span><h3>No matching issues</h3><p>Try another search or reset the filters.</p><button id="empty-reset" class="primary-button">Reset filters</button></div>
+    </section>
+    <footer class="page-footer"><span id="footer-counts">Local issue tracker</span><span>Auto-refresh every 10 seconds <span class="footer-dot">·</span> Read only</span></footer>
+  </main>
+  <dialog id="epic-results-dialog" aria-labelledby="epic-results-title">
+    <header class="epic-modal-header"><div><p>Research briefing · Results &amp; conclusions</p><h2 id="epic-results-title"></h2></div><button id="epic-results-close" class="icon-button" aria-label="Close epic results" autofocus>×</button></header>
+    <article id="epic-results-body" class="markdown epic-modal-body"></article>
+  </dialog>
+  <dialog id="detail" aria-labelledby="detail-title">
+    <div class="detail-top"><button id="detail-back" class="text-button" hidden>← Back</button><span id="detail-epic" class="muted"></span><button id="detail-close" class="icon-button" aria-label="Close issue details">×</button></div>
+    <div class="detail-scroll"><div id="detail-status"></div><h2 id="detail-title"></h2><div id="detail-facts" class="detail-facts"></div><section id="detail-dependencies" class="dependency-section"></section><div id="detail-warnings" class="notice" hidden></div><article id="detail-body" class="markdown"></article><details class="source-inspection"><summary>Inspect source Markdown</summary><p id="detail-path" class="source-path"></p><pre id="detail-source"></pre></details></div>
+  </dialog>
+</body>
+</html>

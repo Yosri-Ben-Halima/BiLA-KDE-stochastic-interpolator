@@ -1,0 +1,426 @@
+[
+  {
+    "name": "Gaussian increments",
+    "data_seed": 8,
+    "sampler_seed": 42,
+    "n_samples": 24000,
+    "gap_start": 101,
+    "gap_stop": 111,
+    "status": "success",
+    "diagnostics": {
+      "diagnostics_pass": true,
+      "rhat_max": 1.000416576428462,
+      "ess_bulk_min": 16140.057906735054,
+      "ess_tail_min": 18578.29047178602,
+      "mean_mcse_ratio_max": 0.0069310407136432255,
+      "mean_mcse": [
+        0.007209446067708844,
+        0.009775096473982925,
+        0.011165407055097857,
+        0.012187290645669164,
+        0.01248601385150058,
+        0.012531161525803396,
+        0.012085465682666729,
+        0.011193512093593651,
+        0.009631334719159192,
+        0.007403131832027793
+      ],
+      "finite_diagnostics": true,
+      "warmup_per_chain": 500,
+      "draws_per_chain": 6000,
+      "total_retained_updates_per_chain": 6000,
+      "discarded_draws_per_chain": 0,
+      "target_evaluations": 75188,
+      "transition_kernel": "elliptical_slice+kernel_gibbs",
+      "gibbs_sweeps_per_update": 4,
+      "chain_streams": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "elapsed_seconds": 29.718075300042983,
+      "peak_process_mib": 179.30078125,
+      "seed": 42,
+      "config": {
+        "time_limit_seconds": 60.0,
+        "memory_limit_bytes": 2147483648,
+        "max_draws_per_chain": 10000,
+        "stopping": "diagnostics"
+      },
+      "density": {
+        "mode": "linear",
+        "left": {
+          "count": 100,
+          "mean": -0.007251342638292519,
+          "sd": 1.0869971951711503,
+          "bandwidth": 0.43274137776917426,
+          "factor": 0.3981071705534972,
+          "variance": 1.3570123733204118
+        },
+        "right": {
+          "count": 100,
+          "mean": 0.04121009420418492,
+          "sd": 1.025910025219624,
+          "bandwidth": 0.4084221373826515,
+          "factor": 0.3981071705534972,
+          "variance": 1.2087751083518816
+        },
+        "weights": [
+          0.9090909090909091,
+          0.8181818181818181,
+          0.7272727272727273,
+          0.6363636363636364,
+          0.5454545454545454,
+          0.4545454545454546,
+          0.36363636363636365,
+          0.2727272727272727,
+          0.18181818181818177,
+          0.09090909090909094,
+          0.0
+        ],
+        "means": [
+          -0.0028457574707945682,
+          0.001559827696703383,
+          0.005965412864201328,
+          0.010370998031699278,
+          0.014776583199197228,
+          0.019182168366695174,
+          0.023587753534193123,
+          0.027993338701691073,
+          0.03239892386918903,
+          0.03680450903668697,
+          0.04121009420418492
+        ],
+        "variances": [
+          1.3437303501299536,
+          1.3304095085781589,
+          1.3170498486650284,
+          1.3036513703905617,
+          1.2902140737547585,
+          1.2767379587576195,
+          1.263223025399144,
+          1.249669273679333,
+          1.2360767035981852,
+          1.2224453151557013,
+          1.2087751083518816
+        ]
+      },
+      "endpoint_error": 0.0,
+      "increment_sum_error": 1.3322676295501878e-15,
+      "support_z": -0.6866538537978635,
+      "gap_start": 101,
+      "gap_stop": 111,
+      "selected_left": [
+        0,
+        100
+      ],
+      "selected_right": [
+        111,
+        211
+      ],
+      "versions": {
+        "numpy": "2.5.4",
+        "scipy": "1.18.1",
+        "pandas": "3.0.6",
+        "arviz": "0.23.4"
+      },
+      "uncertainty": "path conditional on fitted KDEs; excludes density-estimation uncertainty"
+    },
+    "interval_status": "success"
+  },
+  {
+    "name": "Skewed increments",
+    "data_seed": 12,
+    "sampler_seed": 42,
+    "n_samples": 24000,
+    "gap_start": 101,
+    "gap_stop": 111,
+    "status": "success",
+    "diagnostics": {
+      "diagnostics_pass": true,
+      "rhat_max": 1.0004637691596614,
+      "ess_bulk_min": 8240.165142440579,
+      "ess_tail_min": 6738.306918530892,
+      "mean_mcse_ratio_max": 0.011223877514654607,
+      "mean_mcse": [
+        0.011057910495810973,
+        0.014470286689898646,
+        0.017251050252530254,
+        0.018474728528049923,
+        0.01872392173045585,
+        0.01921680002150617,
+        0.017858303944284833,
+        0.017981012682706934,
+        0.014941558799079695,
+        0.010296148078496483
+      ],
+      "finite_diagnostics": true,
+      "warmup_per_chain": 500,
+      "draws_per_chain": 6000,
+      "total_retained_updates_per_chain": 6000,
+      "discarded_draws_per_chain": 0,
+      "target_evaluations": 178632,
+      "transition_kernel": "elliptical_slice+kernel_gibbs",
+      "gibbs_sweeps_per_update": 4,
+      "chain_streams": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "elapsed_seconds": 45.087727800011635,
+      "peak_process_mib": 178.85546875,
+      "seed": 42,
+      "config": {
+        "time_limit_seconds": 60.0,
+        "memory_limit_bytes": 2147483648,
+        "max_draws_per_chain": 10000,
+        "stopping": "diagnostics"
+      },
+      "density": {
+        "mode": "linear",
+        "left": {
+          "count": 100,
+          "mean": 0.04034934155850823,
+          "sd": 0.9387598524158673,
+          "bandwidth": 0.3737270286744996,
+          "factor": 0.3981071705534972,
+          "variance": 1.0121292518646527
+        },
+        "right": {
+          "count": 100,
+          "mean": 0.06217209858129436,
+          "sd": 1.2360326217951982,
+          "bandwidth": 0.4920734497747073,
+          "factor": 0.3981071705534972,
+          "variance": 1.7546351556936737
+        },
+        "weights": [
+          0.9090909090909091,
+          0.8181818181818181,
+          0.7272727272727273,
+          0.6363636363636364,
+          0.5454545454545454,
+          0.4545454545454546,
+          0.36363636363636365,
+          0.2727272727272727,
+          0.18181818181818177,
+          0.09090909090909094,
+          0.0
+        ],
+        "means": [
+          0.042333228560579694,
+          0.044317115562651166,
+          0.046301002564722624,
+          0.048284889566794095,
+          0.05026877656886557,
+          0.052252663570937025,
+          0.054236550573008496,
+          0.05622043757507996,
+          0.058204324577151426,
+          0.0601882115792229,
+          0.06217209858129436
+        ],
+        "variances": [
+          1.0796691466527517,
+          1.1472011698255768,
+          1.214725321383128,
+          1.282241601325405,
+          1.3497500096524084,
+          1.4172505463641374,
+          1.4847432114605925,
+          1.552228004941774,
+          1.619704926807681,
+          1.6871739770583143,
+          1.7546351556936737
+        ]
+      },
+      "endpoint_error": 0.0,
+      "increment_sum_error": 8.881784197001252e-16,
+      "support_z": -0.11738451024545599,
+      "gap_start": 101,
+      "gap_stop": 111,
+      "selected_left": [
+        0,
+        100
+      ],
+      "selected_right": [
+        111,
+        211
+      ],
+      "versions": {
+        "numpy": "2.5.4",
+        "scipy": "1.18.1",
+        "pandas": "3.0.6",
+        "arviz": "0.23.4"
+      },
+      "uncertainty": "path conditional on fitted KDEs; excludes density-estimation uncertainty"
+    },
+    "interval_status": "success"
+  },
+  {
+    "name": "Changing drift and volatility",
+    "data_seed": 21,
+    "sampler_seed": 42,
+    "n_samples": 24000,
+    "gap_start": 101,
+    "gap_stop": 111,
+    "status": "success",
+    "diagnostics": {
+      "diagnostics_pass": true,
+      "rhat_max": 1.001670950320802,
+      "ess_bulk_min": 3955.921799161123,
+      "ess_tail_min": 3951.11242819057,
+      "mean_mcse_ratio_max": 0.01681096889010296,
+      "mean_mcse": [
+        0.01589812782800619,
+        0.022512993211710547,
+        0.027979805219945485,
+        0.0341749973324736,
+        0.03788373925015106,
+        0.04018075930556256,
+        0.041781343021570785,
+        0.04116914939970847,
+        0.03836062229281566,
+        0.030673931279192032
+      ],
+      "finite_diagnostics": true,
+      "warmup_per_chain": 500,
+      "draws_per_chain": 6000,
+      "total_retained_updates_per_chain": 6000,
+      "discarded_draws_per_chain": 0,
+      "target_evaluations": 198532,
+      "transition_kernel": "elliptical_slice+kernel_gibbs",
+      "gibbs_sweeps_per_update": 4,
+      "chain_streams": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "elapsed_seconds": 48.289028400031384,
+      "peak_process_mib": 179.12890625,
+      "seed": 42,
+      "config": {
+        "time_limit_seconds": 60.0,
+        "memory_limit_bytes": 2147483648,
+        "max_draws_per_chain": 10000,
+        "stopping": "diagnostics"
+      },
+      "density": {
+        "mode": "linear",
+        "left": {
+          "count": 100,
+          "mean": 0.010684213351707215,
+          "sd": 0.6331159636764659,
+          "bandwidth": 0.25204800493148855,
+          "factor": 0.3981071705534972,
+          "variance": 0.46035566201730405
+        },
+        "right": {
+          "count": 100,
+          "mean": 0.36507811476000007,
+          "sd": 1.5226542360025475,
+          "bandwidth": 0.6061795696262712,
+          "factor": 0.3981071705534972,
+          "variance": 2.662744833824628
+        },
+        "weights": [
+          0.9090909090909091,
+          0.8181818181818181,
+          0.7272727272727273,
+          0.6363636363636364,
+          0.5454545454545454,
+          0.4545454545454546,
+          0.36363636363636365,
+          0.2727272727272727,
+          0.18181818181818177,
+          0.09090909090909094,
+          0.0
+        ],
+        "means": [
+          0.042901840752461125,
+          0.07511946815321503,
+          0.10733709555396889,
+          0.1395547229547228,
+          0.17177235035547672,
+          0.20398997775623057,
+          0.2362076051569845,
+          0.26842523255773837,
+          0.30064285995849227,
+          0.33286048735924617,
+          0.36507811476000007
+        ],
+        "variances": [
+          0.6709526146076716,
+          0.8794736161673716,
+          1.0859186666964038,
+          1.2902877661947683,
+          1.4925809146624658,
+          1.692798112099495,
+          1.8909393585058567,
+          2.087004653881551,
+          2.2809939982265774,
+          2.4729073915409368,
+          2.662744833824628
+        ]
+      },
+      "endpoint_error": 0.0,
+      "increment_sum_error": 1.7763568394002505e-15,
+      "support_z": 0.9745193577113039,
+      "gap_start": 101,
+      "gap_stop": 111,
+      "selected_left": [
+        0,
+        100
+      ],
+      "selected_right": [
+        111,
+        211
+      ],
+      "versions": {
+        "numpy": "2.5.4",
+        "scipy": "1.18.1",
+        "pandas": "3.0.6",
+        "arviz": "0.23.4"
+      },
+      "uncertainty": "path conditional on fitted KDEs; excludes density-estimation uncertainty"
+    },
+    "interval_status": "summary_precision",
+    "interval_diagnostics": {
+      "levels": [
+        0.025,
+        0.975
+      ],
+      "finite_mcse": true,
+      "max_mcse_ratio": 0.1375893016647271
+    },
+    "display_interval_coverage": 0.9,
+    "fallback_interval_status": "success"
+  }
+]

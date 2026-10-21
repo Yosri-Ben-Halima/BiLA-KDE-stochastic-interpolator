@@ -1,0 +1,11 @@
+schema_version = 1
+seed = 2026
+n_samples = 2000
+window_size = 100
+per_method_seconds = 60
+memory_limit_bytes = 2147483648
+smoke_seconds = 1800
+research_seconds = 14400
+replicates = 30
+stress_replicates = 10
+save_chains = true

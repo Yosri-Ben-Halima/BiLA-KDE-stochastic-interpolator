@@ -1,0 +1,33 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+.scratch/
+
+# Local verification and Monte Carlo artifacts
+.pytest_cache/
+.ruff_cache/
+results/
+
+# Curated public examples; inference archives remain local.
+!results/
+results/*
+!results/examples/
+results/examples/*
+!results/examples/README.md
+!results/examples/before_after.png
+!results/examples/distribution_evolution_styled.gif
+!results/examples/diagnostics.json
+
+# Machine-local configuration and credentials.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
