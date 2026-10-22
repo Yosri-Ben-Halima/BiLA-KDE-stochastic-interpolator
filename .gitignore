@@ -1,0 +1,51 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+.scratch/
+
+# Local verification and Monte Carlo artifacts
+.pytest_cache/
+.ruff_cache/
+results/
+
+# Curated public examples; inference archives remain local.
+!results/
+results/*
+!results/examples/
+results/examples/*
+!results/examples/README.md
+!results/examples/before_after.png
+!results/examples/distribution_evolution_styled.gif
+!results/examples/diagnostics.json
+
+# Machine-local configuration and credentials.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Private project operations and design; never publish these paths.
+dashboard/
+scripts/issue_dashboard.py
+scripts/issue_tracker.py
+scripts/check_issue_dashboard.py
+scripts/campaign_history.py
+tests/dashboard/
+tests/test_issue_dashboard.py
+tests/test_issue_tracker.py
+tests/test_epic_summaries.py
+tests/test_campaign_narrative.py
+tests/test_campaign_history*.py
+docs/context/
+docs/validation/
+docs/releases/
+docs/research/EXECUTIVE_SUMMARY.md
+docs/research/native-kernels-and-path-budgets.md
