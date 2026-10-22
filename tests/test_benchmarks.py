@@ -79,3 +79,33 @@ def test_energy_precision_accounts_for_different_correlated_chain_groups():
     result = scores(draws, np.ones(3), 42)
     assert result["energy_chain_mcse"] > 0.2
     assert result["energy_mcse"] >= result["energy_chain_mcse"]
+
+
+def test_gaussian_oracle_reports_cdf_and_monte_carlo_evidence():
+    from benchmarks.oracles import reference_case
+
+    config = SamplingConfig(time_limit_seconds=30)
+    result = reference_case({"kind": "gaussian", "T": 3, "z": 0}, 42, config, budget=Budget(config))
+    diagnostic = result["diagnostics"]
+    assert diagnostic["oracle_midpoint_probability_error"] <= 0.05
+    assert diagnostic["oracle_mean_mcse_sd"] > 0
+    assert diagnostic["oracle_cov_mcse_relative"] > 0
+    assert diagnostic["oracle_status"] == "pass"
+
+
+def test_kde_oracle_exercises_production_gibbs_and_reference_tails():
+    from benchmarks.oracles import reference_case
+
+    config = SamplingConfig(time_limit_seconds=45)
+    result = reference_case(
+        {"kind": "kde_mixture", "T": 3, "z": 0, "n_samples": 16000},
+        42,
+        config,
+        budget=Budget(config),
+    )
+    diagnostic = result["diagnostics"]
+    assert diagnostic["transition_kernel"] == "elliptical_slice+kernel_gibbs"
+    assert diagnostic["oracle_tail_quantile_error_sd"] >= 0
+    assert diagnostic["oracle_path_quadratic_relative_error"] >= 0
+    assert diagnostic["oracle_production_log_density_error"] < 1e-10
+    assert diagnostic["oracle_status"] == "pass"
