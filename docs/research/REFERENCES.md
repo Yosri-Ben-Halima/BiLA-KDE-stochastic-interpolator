@@ -91,3 +91,14 @@ The final numerical repair preserves the original kernel bandwidths, standardize
 ## Scope of attribution
 
 The observed-increment window rules, linear left/right mixture schedule, benchmark priors, resource limits, diagnostic thresholds, and exact combination of transitions are specified by this repository. The references above supply mathematical building blocks and related methods; none alone establishes the full BiLA-KDE construction as novel, correctly implemented, or scientifically superior. In particular, the present plug-in KDE bridge does not propagate uncertainty in fitted density estimates or bandwidths.
+
+
+## Prospective native-kernel engineering sources
+
+These references inform the next planned experiment; they are not dependencies of the current implementation and do not establish a native speedup.
+
+- [NumPy ufunc basics](https://numpy.org/doc/stable/user/basics.ufuncs.html) and [ufunc output/memory behavior](https://numpy.org/doc/stable/reference/ufuncs.html): why compiled elementwise primitives do not automatically fuse a sequence of array operations.
+- [nanobind ndarray documentation](https://nanobind.readthedocs.io/en/latest/ndarray.html): prospective C++/Python array boundary and zero-copy protocols.
+- [PyO3 guide](https://pyo3.rs/) and [rust-numpy API](https://docs.rs/numpy/latest/numpy/): prospective Rust extension and NumPy interfaces.
+
+The scope, limitations and selected experiment factors are documented in [native kernels and trajectory budgets](native-kernels-and-path-budgets.md).
