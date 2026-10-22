@@ -92,4 +92,4 @@ uv build
 - [References](docs/research/REFERENCES.md): papers, textbooks and software foundations.
 - [Original research proposal](docs/context/formalisation.md): broader ambitions; implemented scope is described above.
 
-The repository includes a local read-only task dashboard (`uv run python -m scripts.issue_dashboard --open`). Its live Markdown tracker is private workspace state under `.scratch/`; a fresh checkout has no local campaign history. Experiment archives under `results/` are also excluded, except the curated examples above. Documentation distinguishes those local evidence paths from publicly included files.
+The repository includes a local read-only task dashboard (`uv run python -m scripts.issue_dashboard --open`). Use its **Campaign history** button to inspect archived runs, linked validation, recovery records and provenance. Its live Markdown tracker is private workspace state under `.scratch/`; a fresh checkout has no local campaign history. Experiment archives under `results/` are also excluded, except the curated examples above. Documentation distinguishes those local evidence paths from publicly included files.

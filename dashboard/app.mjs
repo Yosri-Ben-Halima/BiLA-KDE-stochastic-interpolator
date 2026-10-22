@@ -12,6 +12,9 @@ let graphScale = 1, graphKey = '', currentGraph = null;
 let data = null, busy = false, selected = null, lastTrigger = null, backStack = [], lastSuccess = null;
 const dialog = $('detail');
 const resultsDialog = $('epic-results-dialog');
+const historyDialog = $('campaign-history-dialog');
+let historyRecords = [], historySelected = null, historyBusy = false, historyDetailKey = null, historyStageSource = null;
+const historyButtons = new Map();
 let resultsEpic = null, resultsSignature = null;
 
 function el(tag, className, text) {
@@ -154,6 +157,101 @@ resultsDialog.addEventListener('click', event => {
   if (backdropStart && outsideResults(event)) resultsDialog.close();
   backdropStart = false;
 });
+
+
+function renderHistory() {
+  const list = $('campaign-history-list'), body = $('campaign-history-body');
+  const active = new Set(historyRecords.map(row => row.id));
+  if (!active.has(historySelected)) historySelected = historyRecords[0]?.id || null;
+  for (const [id, node] of historyButtons) if (!active.has(id)) { node.remove(); historyButtons.delete(id); }
+  historyRecords.forEach((row, index) => {
+    let node = historyButtons.get(row.id);
+    if (!node) {
+      node = button('history-record', '', () => { historySelected = row.id; historyStageSource = null; renderHistory(); body.scrollTop = 0; });
+      historyButtons.set(row.id, node);
+    }
+    node.setAttribute('aria-pressed', String(historySelected === row.id));
+    node.replaceChildren(el('strong', '', row.title), el('small', '', `${row.date || 'Run date not recorded'} · ${String(row.status).replaceAll('_', ' ')}`));
+    if (list.children[index] !== node) list.insertBefore(node, list.children[index] || null);
+  });
+  const campaign = historyRecords.find(item => item.id === historySelected);
+  const row = historyStageSource ? campaign?.stages?.find(stage => stage.source === historyStageSource) || campaign : campaign;
+  const signature = JSON.stringify(row);
+  if (signature === historyDetailKey) return;
+  historyDetailKey = signature;
+  const scroll = body.scrollTop;
+  if (!row) { body.replaceChildren(el('p', '', 'No saved campaigns were found. New run manifests appear here automatically.')); return; }
+  const content = el('div');
+  if (historyStageSource) content.append(button('text-button', '← Back to campaign', () => { historyStageSource = null; renderHistory(); body.scrollTop = 0; }));
+  content.append(el('h3', '', row.title || row.label), el('p', 'history-recorded-warning', 'Recorded evidence, not independent process-health verification.'));
+  const facts = el('dl', 'history-facts');
+  const stats = Object.entries(row.counts || {}).map(([name, count]) => `${count} ${name.replaceAll('_', ' ')}`).join(' · ') || 'Outcome rows unavailable';
+  for (const [label, value] of [['Purpose', row.purpose ? String(row.purpose).replaceAll('_', ' ') : 'Purpose not recorded in the original manifest'], ['Status', String(row.status).replaceAll('_', ' ')], ['Research verdict', row.verdict ? String(row.verdict).replaceAll('_', ' ') : 'No separate verdict recorded in this manifest'],
+    ['Applications attempted', `${row.attempted ?? '—'} / ${row.planned ?? '—'}`], ['Recorded outcomes', stats],
+    ['Experiment budget', `${duration(row.elapsed_seconds)} used / ${duration(row.budget_seconds)} cap`],
+    ['Evidence directory', row.source], ['Source signature', row.source_signature || 'Not recorded'],
+    ['Config hash', row.config_hash || 'Not recorded'],
+    ['Manifest updated', row.updated_at ? new Date(row.updated_at).toLocaleString() : 'Not recorded']]) {
+    facts.append(el('dt', '', label), el('dd', '', value));
+  }
+  content.append(facts);
+  if (row.original_source) content.append(el('p', 'history-recovery', `Recovered accounting is attached to the original run at ${row.original_source}. No additional experiment is counted. Original files remain unchanged.`));
+  if (row.stages?.length) {
+    content.append(el('h3', '', 'Linked stages and source versions'));
+    for (const stage of row.stages) {
+      const section = el('section', 'history-stage');
+      section.append(el('strong', '', stage.label), el('p', '', `${stage.role} · ${stage.status} · ${stage.attempted ?? '—'}/${stage.planned ?? '—'} applications`),
+        el('code', '', stage.source), el('p', 'history-hash', `Source: ${stage.source_signature || 'not recorded'}`));
+      const stageCounts = Object.entries(stage.counts || {}).map(([name, count]) => `${count} ${name.replaceAll('_', ' ')}`).join(' · ');
+      section.append(el('p', '', stageCounts || 'Outcome rows unavailable'),
+        el('p', '', `${duration(stage.elapsed_seconds)} recorded / ${duration(stage.budget_seconds)} cap`),
+        button('text-button', `Inspect stage: ${stage.label}`, () => { historyStageSource = stage.source; renderHistory(); body.scrollTop = 0; }));
+      content.append(section);
+    }
+  }
+  if (row.warnings?.length) content.append(el('p', 'notice', row.warnings.join(' · ')));
+  if (Array.isArray(row.limitations)) for (const limitation of row.limitations) content.append(el('p', '', limitation));
+  content.append(el('h3', '', 'Saved research narrative'));
+  if (!row.activity?.length) content.append(el('p', '', 'No narrative was saved for this run. Its recorded status and outcomes remain visible above.'));
+  for (const entry of [...(row.activity || [])].reverse()) {
+    const section = el('section', 'history-narrative');
+    section.append(el('small', '', new Date(entry.at).toLocaleString()), el('h4', '', entry.title), el('p', '', entry.detail));
+    const fields = el('dl', 'thread-narrative');
+    for (const [key, label] of [['testing', 'Testing'], ['why', 'Why'], ['observed', 'Observed'], ['meaning', 'Meaning so far'], ['next', 'Next']]) {
+      if (entry[key]) fields.append(el('dt', '', label), el('dd', '', entry[key]));
+    }
+    section.append(fields); content.append(section);
+  }
+  body.replaceChildren(content); body.scrollTop = scroll;
+}
+async function loadHistory() {
+  if (historyBusy) return;
+  historyBusy = true;
+  try {
+    const response = await fetch('/api/history', {cache: 'no-store', signal: AbortSignal.timeout(8000)});
+    if (!response.ok) throw new Error('History request failed');
+    const payload = await response.json();
+    historyRecords = payload.campaigns;
+    $('campaign-history-note').textContent = payload.warnings?.length ? payload.warnings.join(' · ')
+      : `${historyRecords.length} saved campaigns · source-backed records · active campaign stays on the dashboard`;
+    renderHistory();
+  } catch {
+    $('campaign-history-note').textContent = 'History unavailable. Existing records are retained; retry by reopening this window.';
+  } finally { historyBusy = false; }
+}
+$('campaign-history-open').addEventListener('click', () => {
+  if (!historyDialog.open) historyDialog.showModal();
+  $('campaign-history-close').focus(); loadHistory();
+});
+$('campaign-history-close').addEventListener('click', () => historyDialog.close());
+historyDialog.addEventListener('close', () => $('campaign-history-open').focus());
+let historyBackdrop = false;
+function outsideHistory(event) {
+  const r = historyDialog.getBoundingClientRect();
+  return event.target === historyDialog && (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom);
+}
+historyDialog.addEventListener('pointerdown', event => { historyBackdrop = outsideHistory(event); });
+historyDialog.addEventListener('click', event => { if (historyBackdrop && outsideHistory(event)) historyDialog.close(); historyBackdrop = false; });
 
 function duration(seconds) {
   if (!Number.isFinite(seconds)) return '—';
@@ -510,7 +608,7 @@ narrow.addEventListener('change', event => {
   else if (view.mode === 'dependency') scaleGraph();
 });
 document.addEventListener('keydown', event => {
-  if (event.key === '/' && !dialog.open && !resultsDialog.open && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
+  if (event.key === '/' && !dialog.open && !resultsDialog.open && !historyDialog.open && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
     event.preventDefault(); $('search').focus();
   }
 });
@@ -531,6 +629,7 @@ async function refresh() {
     renderEpics(); renderCampaign(); renderTasks();
     if (selected) renderDetails();
     if (resultsEpic) renderResults();
+    if (historyDialog.open) loadHistory();
     $('footer-counts').textContent = `${data.epics.length} epics · ${data.issues.length} issues · ${data.counts.resolved} resolved`;
   } catch (error) {
     $('freshness').classList.add('disconnected'); $('freshness').textContent = 'Connection interrupted';

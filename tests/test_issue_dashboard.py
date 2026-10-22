@@ -40,6 +40,18 @@ def test_state_and_index_are_served_without_exposing_a_directory(server):
         assert "frame-ancestors 'none'" in response.headers["Content-Security-Policy"]
 
 
+def test_history_endpoint_is_read_only_and_reports_saved_runs(server, tmp_path):
+    _, url = server
+    folder = tmp_path / 'results' / 'saved'
+    folder.mkdir(parents=True)
+    (folder / 'manifest.json').write_text(json.dumps({'stage': 'smoke', 'status': 'validated'}))
+    with urlopen(url + '/api/history') as response:
+        payload = json.load(response)
+        assert len(payload['campaigns']) == 1
+        assert payload['campaigns'][0]['status'] == 'validated'
+        assert response.headers['Cache-Control'] == 'no-store'
+
+
 def test_indexed_markdown_is_available_as_plain_text(server):
     _, url = server
     with urlopen(url + "/api/source?path=.scratch/epic/issues/01-work.md") as response:

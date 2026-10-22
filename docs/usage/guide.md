@@ -109,3 +109,12 @@ For a finished research run using JSON artifacts, `uv run python -m scripts.rese
 ## Packaging
 
 `uv build` produces the installable `bilakde` import package. Runtime dependencies and development tools are locked in `uv.lock`. The research tooling lives in the repository's `benchmarks/` directory and is run from a checkout.
+
+
+## Campaign traceability
+
+The local dashboard's **Campaign history** button opens saved runs over a blurred background. It exposes recorded outcomes, budgets, source/config hashes, linked validation stages and archived research narratives while leaving the active campaign separate. Recovery records attach to their original experiment rather than counting as another run. Use **Inspect stage** for full stage evidence.
+
+Manifests and optional `results/campaign-history.json` relationships persist locally. The server reads them without modifying evidence; new run manifests are discovered automatically. These operational records are excluded from the public repository. A fresh checkout shows empty history until measurements are generated.
+
+The live campaign thread supports concise Testing → Why → Observed → Meaning so far → Next updates. It distinguishes recorded findings, uncertain interpretations and next decisions; a progress record is not independent process-health verification.

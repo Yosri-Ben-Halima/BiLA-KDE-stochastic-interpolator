@@ -82,6 +82,12 @@ def main():
             '# Results\n\n## Executive summary\n\nDelivered prototype.\n\n'
             '## Conclusion\n\n[Evidence](map.md).\n', encoding='utf-8'
         )
+        for name, status in [('history-original', 'running'), ('history-recovered', 'interrupted'), ('history-validation', 'validated')]:
+            folder = root / 'results' / name
+            folder.mkdir(parents=True)
+            (folder / 'manifest.json').write_text(json.dumps({'stage':'history_fixture','status':status,'planned':3,'attempted':2,'source_signature':'frozen-history-source','budget_seconds':60,'elapsed_seconds':20}))
+            (folder / 'results.json').write_text(json.dumps({'results':[{'status':'success'},{'status':'time_limit'},{'status':'untested'}]}))
+        (root / 'results/campaign-history.json').write_text(json.dumps({'campaigns':[{'id':'original','title':'Recovered campaign','date':'2026-10-21','source':'results/history-recovered','original_source':'results/history-original','stages':[{'source':'results/history-validation','role':'validation','label':'Linked smoke'}]}]}))
         server = make_server(root, port=0)
         thread = threading.Thread(target=server.serve_forever, daemon=True)
         thread.start()
@@ -148,6 +154,55 @@ def main():
                 no_overflow(page)
                 page.screenshot(path=str(args.output / "desktop-fixture.png"), full_page=True)
                 checks.append("Desktop rendering, source counts and unavailable campaign")
+                page.locator('#campaign-history-open').click()
+                history = page.locator('#campaign-history-dialog')
+                expect(history).to_be_visible()
+                expect(page.locator('.history-record')).to_have_count(1)
+                expect(history).to_contain_text('Recovered accounting is attached to the original run')
+                expect(history).to_contain_text('Linked smoke')
+                expect(history).to_contain_text('frozen-history-source')
+                expect(history).to_contain_text('1 success')
+                expect(history).to_contain_text('Purpose not recorded in the original manifest')
+                history.get_by_role('button', name='Inspect stage: Linked smoke').click()
+                expect(page.locator('#campaign-history-body')).to_contain_text('1 untested')
+                expect(page.locator('#campaign-history-body')).to_contain_text('Saved research narrative')
+                history.get_by_role('button', name='← Back to campaign').click()
+                expect(history).to_contain_text('Recovered accounting is attached to the original run')
+                assert page.evaluate("document.querySelector('#campaign-history-dialog').matches(':modal')")
+                page.screenshot(path=str(args.output / 'history-desktop.png'))
+                page.set_viewport_size({'width':390,'height':844})
+                no_overflow(page)
+                page.screenshot(path=str(args.output / 'history-mobile.png'))
+                page.keyboard.press('Escape')
+                expect(history).not_to_be_visible()
+                expect(page.locator('#campaign-history-open')).to_be_focused()
+                expect(page.locator('#view-count')).to_have_text('6')
+                page.set_viewport_size({'width':1440,'height':1050})
+                checks.append('Campaign history groups recovery and validation, shows outcomes/provenance, and preserves the active view on close')
+
+                page.route('**/api/history', lambda route: route.fulfill(
+                    status=200, content_type='application/json',
+                    body=json.dumps({'campaigns': [], 'warnings': []}),
+                ))
+                page.locator('#campaign-history-open').click()
+                expect(history).to_contain_text('No saved campaigns were found')
+                expect(page.locator('.history-record')).to_have_count(0)
+                page.keyboard.press('Escape')
+                page.unroute('**/api/history')
+                expected_network_failure = True
+                page.route('**/api/history', lambda route: route.fulfill(status=503))
+                page.locator('#campaign-history-open').click()
+                expect(page.locator('#campaign-history-note')).to_contain_text('History unavailable')
+                page.keyboard.press('Escape')
+                page.unroute('**/api/history')
+                page.locator('#campaign-history-open').click()
+                expect(page.locator('.history-record')).to_have_count(1)
+                expect(page.locator('#campaign-history-note')).not_to_contain_text('History unavailable')
+                expect(history).to_contain_text('Recovered accounting is attached to the original run')
+                page.keyboard.press('Escape')
+                expected_network_failure = False
+                checks.append('Empty campaign history and failed fetch recover correctly when the window is reopened')
+
                 page.set_viewport_size({"width": 390, "height": 844})
                 expect(page.locator("#list-view")).to_have_attribute("aria-pressed", "true")
                 no_overflow(page)

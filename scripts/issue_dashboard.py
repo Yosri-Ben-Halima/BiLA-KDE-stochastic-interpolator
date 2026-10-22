@@ -8,6 +8,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
+from scripts.campaign_history import read_history
 from scripts.issue_tracker import read_tracker
 
 ASSETS = {
@@ -81,6 +82,9 @@ def make_server(root: Path, port: int = 8765, research: Path | None = None) -> T
                     self.respond(
                         200, json.dumps(payload, allow_nan=False), "application/json; charset=utf-8"
                     )
+                elif route.path == "/api/history":
+                    self.respond(200, json.dumps(read_history(root), allow_nan=False),
+                                 "application/json; charset=utf-8")
                 elif route.path == "/api/source":
                     value = parse_qs(route.query).get("path", [""])[0]
                     target = _source(root, value)

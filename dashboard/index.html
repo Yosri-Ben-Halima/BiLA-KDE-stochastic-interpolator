@@ -20,7 +20,7 @@
   <main>
     <header class="page-header">
       <div><div class="breadcrumb">Workspace <span>/</span> Overview</div><h1>Work</h1></div>
-      <div class="header-actions"><span id="freshness" class="freshness" role="status">Connecting…</span><button id="refresh" class="icon-button" aria-label="Refresh issues" title="Refresh issues">↻</button></div>
+      <div class="header-actions"><button id="campaign-history-open" class="history-open">Campaign history</button><span id="freshness" class="freshness" role="status">Connecting…</span><button id="refresh" class="icon-button" aria-label="Refresh issues" title="Refresh issues">↻</button></div>
     </header>
     <div id="notice" class="notice" role="alert" hidden></div>
     <section class="overview-section" aria-labelledby="epics-heading">
@@ -48,6 +48,11 @@
     </section>
     <footer class="page-footer"><span id="footer-counts">Local issue tracker</span><span>Auto-refresh every 10 seconds <span class="footer-dot">·</span> Read only</span></footer>
   </main>
+  <dialog id="campaign-history-dialog" aria-labelledby="campaign-history-title">
+    <header class="epic-modal-header"><div><p>Traceability · Saved campaign evidence</p><h2 id="campaign-history-title">Campaign history</h2></div><button id="campaign-history-close" class="icon-button" aria-label="Close campaign history" autofocus>×</button></header>
+    <p id="campaign-history-note" class="history-note" role="status">Loading archived records…</p>
+    <div class="history-layout"><nav id="campaign-history-list" aria-label="Saved campaigns"></nav><article id="campaign-history-body" class="markdown" aria-live="polite"></article></div>
+  </dialog>
   <dialog id="epic-results-dialog" aria-labelledby="epic-results-title">
     <header class="epic-modal-header"><div><p>Research briefing · Results &amp; conclusions</p><h2 id="epic-results-title"></h2></div><button id="epic-results-close" class="icon-button" aria-label="Close epic results" autofocus>×</button></header>
     <article id="epic-results-body" class="markdown epic-modal-body"></article>
