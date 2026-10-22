@@ -1,5 +1,7 @@
 # Executive summary — 21 October 2026
 
+This is a historical snapshot: epic counts, checks and recommended next steps below describe 21 October. For later dashboard deliveries and the planned native-kernel investigation, see the [change history](../releases/CHANGELOG.md) and [next-investigation note](native-kernels-and-path-budgets.md).
+
 **The research prototype and local dashboard are delivered. The corrected software passes its checks. BiLA-KDE's predictive superiority is still unproven.** The comparative campaign was interrupted; its measurements were recovered without restarting inference.
 
 All **4 epics and 29 issues are resolved (100% of the tracked work)**. This measures closure with recorded outcomes, including unsuccessful outcomes. It does not mean that the planned scientific study completed or that its hypothesis was confirmed.
